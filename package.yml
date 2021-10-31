@@ -1,0 +1,8 @@
+package: module_preview
+version: '0.0.1'
+author: eaCe
+
+requires:
+  redaxo: ^5.7.0
+  php:
+    version: '>=7.1'
