@@ -45,9 +45,9 @@ class module_preview extends rex_article_content_editor
 
                     if (rex::getUser()->getComplexPerm('modules')->hasPerm($m['id'])) {
                         if (rex_template::hasModule($this->template_attributes, $ctId, $m['id'])) {
-                            $image = rex_addon::get('module_preview')->getAssetsUrl('modules/'.rex_string::normalize(rex_i18n::translate($m['name'], false), '-').'.jpg');
+                            $image = rex_url::assets('addons/module_preview_modules/'.$m['id'].'.jpg');
                             $moduleList .= '<li class="column">';
-                                $moduleList .= '<a href="'.$context->getUrl(['module_id' => $m['id']]).'" data-href="'.$context->getUrl(['module_id' => $m['id']]).'" class="module" data-name="'.rex_string::normalize(rex_i18n::translate($m['name'], false), '-').'">';
+                                $moduleList .= '<a href="'.$context->getUrl(['module_id' => $m['id']]).'" data-href="'.$context->getUrl(['module_id' => $m['id']]).'" class="module" data-name="'.$m['id'].'.jpg">';
                                     $moduleList .= '<div class="header">'.rex_i18n::translate($m['name'], false).'</div>';
                                     $moduleList .= '<div class="image"><div>';
                                         if(file_exists($image)) {
