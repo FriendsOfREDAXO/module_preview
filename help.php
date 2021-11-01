@@ -1,5 +1,5 @@
 <p>
-    Die Screenshots der Modulausgaben sollten im 16:9 Format vorliegen und im Asset Ordner des Addons unter Modules (assets\addons\module_preview_modules) abgelegt werden.
+    Die Screenshots der Modulausgaben sollten im 16:9 Format vorliegen und im Asset Ordner (assets\addons\module_preview_modules) abgelegt werden.
     <br>
     <br>
     Die Modul-ID gibt den Bildname vor (1.jpg, 2.jpg, etc.).
