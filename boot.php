@@ -4,7 +4,7 @@ if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBacken
     rex_view::addCssFile($this->getAssetsUrl('css/styles.css'));
 
     rex_extension::register('STRUCTURE_CONTENT_MODULE_SELECT', function (rex_extension_point $ep) {
-        $html = '<div class="btn-block">';
+        $html = '<div class="btn-block '.(rex_addon::exists('bloecks') && $ep->getParam('slice_id') !== -1 ? 'bloecks' : '').'">';
             $html .= '<button class="btn btn-default btn-block show-module-preview" type="button" data-slice="'.$ep->getParam('slice_id').'">';
                 $html .= '<strong>Block hinzufügen</strong> ';
                 $html .= '<i class="fa fa-plus-circle" aria-hidden="true"></i>';

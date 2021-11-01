@@ -1,10 +1,22 @@
 .rex-slice-select {
+  .bloecks {
+    opacity: 0;
+    z-index: 5;
+    position: relative;
+  }
+
   .btn-default {
     background-color: #dbedf7;
     border-color: #dbedf7;
     color: #4b9ad9;
     border-radius: 0;
   }
+}
+
+.rex-slice-draggable.is--compact:hover .rex-slice-select > .bloecks {
+  opacity: 1;
+  transform: translateY(-50%);
+  transition: transform 300ms ease-out, opacity 300ms ease-out, max-height 0ms linear 0ms;
 }
 
 #module-preview {
