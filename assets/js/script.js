@@ -38,6 +38,15 @@ $(document).on('rex:ready', function () {
     }
   });
 
+  $modulePreview.on('click', function (event) {
+    const $target = $(event.target);
+    if($target.hasClass('module-list') || $target.attr('id') === 'module-preview') {
+      event.preventDefault();
+      event.stopPropagation();
+      hideModulePreview();
+    }
+  });
+
   $close.on('click', function (event) {
     event.preventDefault();
     hideModulePreview();
