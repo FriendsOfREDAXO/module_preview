@@ -32,6 +32,10 @@
   padding: 40px;
   z-index: 1000005;
 
+  @media (max-width: 768px) {
+    padding: 35px 0;
+  }
+
   .close {
     position: absolute;
     right: 10px;
@@ -42,9 +46,13 @@
     opacity: 0.8;
 
     @media (max-width: 768px) {
-      padding: 35px 0;
       top: 5px;
     }
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1500px;
   }
 
   .module-list {
@@ -72,7 +80,7 @@
 
       @media (max-width: 400px) {
         width: 100%;
-        margin: 0;
+        margin: 0 0 5px;
       }
     }
 

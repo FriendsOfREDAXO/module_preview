@@ -81,8 +81,10 @@ function hideModulePreview() {
 
     if(moduleAdded) {
       setTimeout(function () {
-        $('html,body').scrollTop($('#REX_FORM').offset().top);
-        moduleAdded = false;
+        if($('#REX_FORM').length) {
+          $('html,body').scrollTop($('#REX_FORM').offset().top);
+          moduleAdded = false;
+        }
       }, 10)
     }
   });
