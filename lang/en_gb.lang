@@ -1,0 +1,5 @@
+module_preview_classic = Use classic dropdown
+module_preview_settings = Settings
+module_preview_save = Save settings
+module_preview_saved = Settings have been saved
+module_preview_error = An error occurred

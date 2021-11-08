@@ -2,6 +2,13 @@ package: module_preview
 version: '0.0.1'
 author: eaCe
 
+page:
+  title: Module preview
+  perm: admin[]
+  icon: rex-icon fa-th
+  subpages:
+    settings: { title: translate:settings }
+
 requires:
   redaxo: ^5.7.0
   php:

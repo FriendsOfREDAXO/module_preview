@@ -1,6 +1,12 @@
 <?php
 $addon = rex_addon::get('module_preview');
 
+if (!$addon->hasConfig()) {
+    $addon->setConfig([
+        'classic' => false,
+    ]);
+}
+
 if (class_exists('rex_scss_compiler')) {
     $compiler = new rex_scss_compiler();
     $compiler->setRootDir(rex_path::addon('module_preview/scss'));
