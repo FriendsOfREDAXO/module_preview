@@ -5,8 +5,17 @@ if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBacken
     rex_view::addJSFile($this->getAssetsUrl('js/script.min.js'));
     rex_view::addCssFile($this->getAssetsUrl('css/styles.css'));
 
-    rex_extension::register('STRUCTURE_CONTENT_MODULE_SELECT', function (rex_extension_point $ep) {
-        $html = '<div class="btn-block '.(rex_addon::exists('bloecks') && $ep->getParam('slice_id') !== -1 ? 'bloecks' : '').'">';
+    $bloecksDragIsInstalled = false;
+    if(rex_addon::exists('bloecks')) {
+        $addons = rex_addon::getInstalledAddons();
+
+        if(isset($addons['bloecks'])) {
+            $bloecksDragIsInstalled = $addons['bloecks']->getPlugin('dragndrop')->isAvailable();
+        }
+    }
+
+    rex_extension::register('STRUCTURE_CONTENT_MODULE_SELECT', function (rex_extension_point $ep) use ($bloecksDragIsInstalled) {
+        $html = '<div class="btn-block '.($bloecksDragIsInstalled && $ep->getParam('slice_id') !== -1 ? 'bloecks' : '').'">';
             $html .= '<button class="btn btn-default btn-block show-module-preview" type="button" data-slice="'.$ep->getParam('slice_id').'">';
                 $html .= '<strong>Block hinzufügen</strong> ';
                 $html .= '<i class="fa fa-plus-circle" aria-hidden="true"></i>';
