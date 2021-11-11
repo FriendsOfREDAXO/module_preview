@@ -5,6 +5,7 @@
 if (rex_post('config-submit', 'boolean')) {
     $this->setConfig(rex_post('config', [
         ['classic', 'bool'],
+        ['hide_search', 'bool'],
     ]));
 
     echo rex_view::success($this->i18n('saved'));
@@ -17,6 +18,17 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="rex-module-preview-classic">' . $this->i18n('classic') . '</label>';
 $n['field'] = '<input type="checkbox" id="rex-module-preview-classic" name="config[classic]" value="1" ' . ($this->getConfig('classic') ? ' checked="checked"' : '') . ' />';
+$formElements[] = $n;
+
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/checkbox.php');
+
+$formElements = [];
+
+$n = [];
+$n['label'] = '<label for="rex-module-preview-hide-search">' . $this->i18n('hide_search') . '</label>';
+$n['field'] = '<input type="checkbox" id="rex-module-preview-hide-search" name="config[hide_search]" value="1" ' . ($this->getConfig('hide_search') ? ' checked="checked"' : '') . ' />';
 $formElements[] = $n;
 
 $fragment = new rex_fragment();

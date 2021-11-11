@@ -1,4 +1,4 @@
-let $showModulePreview, slicePosition, slice, $modules, $modulePreview, $close,$body, $html, previewActive, moduleAdded = false;
+let $showModulePreview, slicePosition, slice, $modules, $modulePreview, $close, $modulesSearch, $body, $html, previewActive = false, moduleAdded = false;
 
 $(document).on('rex:ready', function () {
   $showModulePreview = $('button.show-module-preview');
@@ -7,6 +7,7 @@ $(document).on('rex:ready', function () {
   $body = $('body');
   $html = $('html');
   $modules = $modulePreview.find('a.module');
+  $modulesSearch = $modulePreview.find('#module-preview-search');
 
   hideModulePreview();
 
@@ -51,9 +52,49 @@ $(document).on('rex:ready', function () {
     event.preventDefault();
     hideModulePreview();
   });
+
+  /**
+   * contains case insensitive...
+   * https://stackoverflow.com/a/8747204
+   */
+  jQuery.expr[':'].icontains = function (a, i, m) {
+    return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+  };
+
+  $modulesSearch.on('keyup', function () {
+    const value = $modulesSearch.val();
+    if (value) {
+      $modules.parent().hide();
+      $modules.filter(':icontains(' + value + ')').parent().show();
+    }
+    else {
+      $modules.parent().show();
+    }
+  });
+
+  /**
+   * trap tabbable elements
+   */
+  const $tabbableElements = $modulePreview.find('select, input, textarea, button, a');
+  const $firstTabbableElement = $tabbableElements.first();
+  const $lastTabbableElement = $tabbableElements.last();
+
+  $lastTabbableElement.on('keydown', function (e) {
+    if ((e.which === 9 && !e.shiftKey) && previewActive) {
+      e.preventDefault();
+      $firstTabbableElement.focus();
+    }
+  });
+
+  $firstTabbableElement.on('keydown', function (e) {
+    if ((e.which === 9 && e.shiftKey) && previewActive) {
+      e.preventDefault();
+      $lastTabbableElement.focus();
+    }
+  });
 });
 
-$(document).on('keyup', function(event) {
+$(document).on('keyup', function (event) {
   if (event.key === 'Escape') hideModulePreview();
 });
 
@@ -64,6 +105,12 @@ function showModulePreview() {
   $body.css('height', 'auto');
   $html.css('overflow', 'hidden');
   $body.addClass('modal-open');
+  $modulesSearch.val('');
+  $modules.parent().show();
+
+  if ($modulesSearch.length) {
+    $modulesSearch.focus();
+  }
 
   for (let i = 0; i < $modules.length; i++) {
     const href = $modules.eq(i).data('href');

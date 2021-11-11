@@ -1,5 +1,5 @@
 <?php
-$useClassic = rex_config::get('module_preview', 'classic');
+$useClassic = \rex_config::get('module_preview', 'classic');
 
 if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBackendPage() && rex::getUser() && !$useClassic) ){
     rex_view::addJSFile($this->getAssetsUrl('js/script.min.js'));
@@ -26,8 +26,14 @@ if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBacken
     });
 
     rex_extension::register('OUTPUT_FILTER', static function (rex_extension_point $ep) {
+        $hideSearch = \rex_config::get('module_preview', 'hide_search');
         $modulePreview = new module_preview();
-        $output = '<div id="module-preview" data-pjax-container="#rex-js-page-main-content"><div class="close"><span aria-hidden="true">&times;</span></div>'.$modulePreview->getModules().'</div>';
+        $output = '<div id="module-preview" data-pjax-container="#rex-js-page-main-content"><div class="close"><span aria-hidden="true">&times;</span></div>';
+        if (!$hideSearch) {
+            $output .= $modulePreview->getSearch();
+        }
+        $output .= $modulePreview->getModules();
+        $output .= '</div>';
 
         if ($output) {
             $ep->setSubject(str_ireplace(

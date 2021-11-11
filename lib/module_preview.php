@@ -77,4 +77,12 @@ class module_preview extends rex_article_content_editor
 
         return $moduleList;
     }
+
+    public function getSearch() {
+        $addon = rex_addon::get('module_preview');
+        $search = '<div class="container"><div class="form-group">';
+        $search .= '<label class="control-label" for="module-preview-search"><input class="form-control" name="module-preview-search" type="text" id="module-preview-search" value="" placeholder="'.$addon->i18n('module_preview_search_modules').'" /></label>';
+        $search .= '</div></div>';
+        return $search;
+    }
 }
