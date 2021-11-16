@@ -4,6 +4,7 @@ class module_preview extends rex_article_content_editor
     private $modules = 0;
 
     public function getModules() {
+        $hideImages = \rex_config::get('module_preview', 'hide_images');
         $articleId = rex_request('article_id', 'int');
         $categoryId = rex_request('category_id', 'int');
         $clang = rex_request('clang', 'int');
@@ -37,8 +38,9 @@ class module_preview extends rex_article_content_editor
             $templateCtypes = [1 => 'default'];
         }
 
+        $additionalModuleListClass = $hideImages ? 'images-hidden' : '';
         $moduleList = '<div class="container">';
-            $moduleList .= '<ul class="module-list">';
+            $moduleList .= '<ul class="module-list '.$additionalModuleListClass.'">';
             $this->modules = [];
             foreach ($templateCtypes as $ctId => $ctName) {
                 foreach ($modules as $m) {
@@ -49,14 +51,16 @@ class module_preview extends rex_article_content_editor
                             $moduleList .= '<li class="column">';
                                 $moduleList .= '<a href="'.$context->getUrl(['module_id' => $m['id']]).'" data-href="'.$context->getUrl(['module_id' => $m['id']]).'" class="module" data-name="'.$m['id'].'.jpg">';
                                     $moduleList .= '<div class="header">'.rex_i18n::translate($m['name'], false).'</div>';
-                                    $moduleList .= '<div class="image"><div>';
-                                        if(file_exists($image)) {
-                                            $moduleList .= '<img src="'.$image.'" alt="'.rex_i18n::translate($m['name'], false).'">';
-                                        }
-                                        else {
-                                            $moduleList .= '<div class="not-available"></div>';
-                                        }
-                                    $moduleList .= '</div></div>';
+                                    if(!$hideImages) {
+                                        $moduleList .= '<div class="image"><div>';
+                                            if(file_exists($image)) {
+                                                $moduleList .= '<img src="'.$image.'" alt="'.rex_i18n::translate($m['name'], false).'">';
+                                            }
+                                            else {
+                                                $moduleList .= '<div class="not-available"></div>';
+                                            }
+                                        $moduleList .= '</div></div>';
+                                    }
                                 $moduleList .= '</a>';
                             $moduleList .= '</li>';
 

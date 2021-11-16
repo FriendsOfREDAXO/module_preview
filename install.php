@@ -5,6 +5,7 @@ if (!$addon->hasConfig()) {
     $addon->setConfig([
         'classic' => false,
         'hide_search' => true,
+        'hide_images' => false,
     ]);
 }
 

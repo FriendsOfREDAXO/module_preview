@@ -5,3 +5,4 @@ module_preview_saved = Die Einstellungen wurden gespeichert.
 module_preview_error = Es ist ein Fehler aufgetreten.
 module_preview_search_modules = Module suchen
 module_preview_hide_search = Suche ausblenden
+module_preview_hide_images = Bilder ausblenden
