@@ -5,6 +5,7 @@ module_preview_saved = Settings have been saved
 module_preview_error = An error occurred
 module_preview_search_modules = Search modules
 module_preview_hide_search = Hide search
+module_preview_hide_images = Hide images
 module_preview_select_image = Select image
 module_preview_save = Save
 module_preview_manage_images = Manage images
