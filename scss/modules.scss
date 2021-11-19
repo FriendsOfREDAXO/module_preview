@@ -1,0 +1,103 @@
+.module-container {
+  max-width: 1400px;
+
+  .module-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+
+    .module-col {
+      flex: 0 0 auto;
+      width: 25%;
+      padding: 0 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      @media (max-width: 1200px) {
+        width: 33.33333333333333%;
+      }
+
+      @media (max-width: 600px) {
+        width: 50%;
+      }
+
+      @media (max-width: 400px) {
+        width: 100%;
+      }
+
+      .module {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  label.file-label {
+    input[type="file"] {
+      position:absolute;
+      top: -1000%;
+      left: -1000%;
+      visibility: hidden;
+    }
+
+    &:hover {
+      background: #CCC;
+    }
+
+    &:active {
+      background: #CCF;
+    }
+  }
+
+  .image {
+    display: inline-block;
+    width: 100%;
+    background-color: #5bb585;
+    border: 1px solid #5bb585;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      display: block;
+      padding-top: 56.25%;
+      content: "";
+    }
+
+    > div {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      &.n-a {
+        opacity: 0.75;
+      }
+    }
+
+    .delete-image {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      border: 0;
+      margin: 0;
+      padding: 10px;
+      height: 35px;
+      width: 35px;
+      line-height: 15px;
+      background-color: #8B0000;
+      color: #fff;
+      z-index: 5;
+    }
+  }
+}
