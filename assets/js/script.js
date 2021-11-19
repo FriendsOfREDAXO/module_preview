@@ -6,32 +6,18 @@ $(document).on('rex:ready', function () {
   $close = $modulePreview.find('.close');
   $body = $('body');
   $html = $('html');
-  $modules = $modulePreview.find('a.module');
-  $modulesSearch = $modulePreview.find('#module-preview-search');
 
   hideModulePreview();
 
-  $modules.off('click');
   $showModulePreview.off('click');
   $close.off('click');
-
-  $modules.on('click', function () {
-    const $this = $(this);
-    moduleAdded = true;
-    // eslint-disable-next-line no-undef
-    const regex = new RegExp('\\bpage=' + rex.page + '(\\b[^/]|$)');
-    if (regex.test($this.attr('href'))) {
-      // event.preventDefault();
-      hideModulePreview();
-    }
-  });
 
   $showModulePreview.on('click', function (event) {
     event.preventDefault();
     slicePosition = $(this).parents('li').attr('id');
     slice = $(this).data('slice');
 
-    if(previewActive) {
+    if (previewActive) {
       hideModulePreview();
     }
     else {
@@ -41,7 +27,7 @@ $(document).on('rex:ready', function () {
 
   $modulePreview.on('click', function (event) {
     const $target = $(event.target);
-    if($target.hasClass('module-list') || $target.attr('id') === 'module-preview') {
+    if ($target.hasClass('module-list') || $target.parent().hasClass('inner') || $target.attr('id') === 'module-preview') {
       event.preventDefault();
       event.stopPropagation();
       hideModulePreview();
@@ -60,6 +46,61 @@ $(document).on('rex:ready', function () {
   jQuery.expr[':'].icontains = function (a, i, m) {
     return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
   };
+});
+
+$(document).on('keyup', function (event) {
+  if (event.key === 'Escape') hideModulePreview();
+});
+
+function showModulePreview() {
+  $.ajax({
+    url: $showModulePreview.eq(0).data('url'),
+    beforeSend: function () {
+    }
+  })
+  .done(function (html) {
+    if(html) {
+      $modulePreview.find('.inner').html(html);
+
+      previewActive = true;
+      $modulePreview.fadeIn();
+      $body.addClass('module-preview');
+      $body.css('height', 'auto');
+      $html.css('overflow', 'hidden');
+      $body.addClass('modal-open');
+      $modules = $modulePreview.find('a.module');
+      $modules.parent().show();
+
+      for (let i = 0; i < $modules.length; i++) {
+        const href = $modules.eq(i).data('href');
+        $modules.eq(i).attr('href', href + '&slice_id=' + slice + '#' + slicePosition);
+      }
+
+      attachModuleEventHandler();
+    }
+  })
+  .fail(function (jqXHR, textStatus, errorThrown) {
+    console.error('script.js:89', '  ↴', '\n', jqXHR, textStatus, errorThrown);
+  });
+}
+
+function attachModuleEventHandler() {
+  $modulesSearch = $modulePreview.find('#module-preview-search');
+
+  if ($modulesSearch.length) {
+    $modulesSearch.focus();
+  }
+
+  $modules.on('click', function () {
+    const $this = $(this);
+    moduleAdded = true;
+    // eslint-disable-next-line no-undef
+    const regex = new RegExp('\\bpage=' + rex.page + '(\\b[^/]|$)');
+    if (regex.test($this.attr('href'))) {
+      // event.preventDefault();
+      hideModulePreview();
+    }
+  });
 
   $modulesSearch.on('keyup', function () {
     const value = $modulesSearch.val();
@@ -92,30 +133,6 @@ $(document).on('rex:ready', function () {
       $lastTabbableElement.focus();
     }
   });
-});
-
-$(document).on('keyup', function (event) {
-  if (event.key === 'Escape') hideModulePreview();
-});
-
-function showModulePreview() {
-  previewActive = true;
-  $modulePreview.fadeIn();
-  $body.addClass('module-preview');
-  $body.css('height', 'auto');
-  $html.css('overflow', 'hidden');
-  $body.addClass('modal-open');
-  $modulesSearch.val('');
-  $modules.parent().show();
-
-  if ($modulesSearch.length) {
-    $modulesSearch.focus();
-  }
-
-  for (let i = 0; i < $modules.length; i++) {
-    const href = $modules.eq(i).data('href');
-    $modules.eq(i).attr('href', href + '&slice_id='+slice+'#'+slicePosition);
-  }
 }
 
 function hideModulePreview() {
@@ -125,10 +142,11 @@ function hideModulePreview() {
     $body.css('height', '100%');
     $html.css('overflow', 'initial');
     $body.removeClass('modal-open');
+    $modulePreview.find('.inner').empty();
 
-    if(moduleAdded) {
+    if (moduleAdded) {
       setTimeout(function () {
-        if($('#REX_FORM').length) {
+        if ($('#REX_FORM').length) {
           $('html,body').scrollTop($('#REX_FORM').offset().top);
           moduleAdded = false;
         }

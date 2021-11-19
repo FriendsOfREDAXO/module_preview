@@ -20,8 +20,20 @@ if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBacken
     }
 
     rex_extension::register('STRUCTURE_CONTENT_MODULE_SELECT', function (rex_extension_point $ep) use ($bloecksDragIsInstalled) {
+        $clang = rex_request('clang', 'int');
+        $clang = rex_clang::exists($clang) ? $clang : rex_clang::getStartId();
+        $category_id = rex_request('category_id', 'int');
+        $article_id = rex_request('article_id', 'int');
+
+        $params = [
+            'clang' => $clang,
+            'category_id' => $category_id,
+            'article_id' => $article_id,
+            'buster' => time()
+        ];
+
         $html = '<div class="btn-block '.($bloecksDragIsInstalled && $ep->getParam('slice_id') !== -1 ? 'bloecks' : '').'">';
-            $html .= '<button class="btn btn-default btn-block show-module-preview" type="button" data-slice="'.$ep->getParam('slice_id').'">';
+            $html .= '<button class="btn btn-default btn-block show-module-preview" type="button" data-slice="'.$ep->getParam('slice_id').'" data-url="'.rex_url::currentBackendPage($params + rex_api_module_preview_get_modules::getUrlParams()).'">';
                 $html .= '<strong>Block hinzufügen</strong> ';
                 $html .= '<i class="fa fa-plus-circle" aria-hidden="true"></i>';
             $html .= '</button>';
@@ -31,13 +43,8 @@ if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBacken
     });
 
     rex_extension::register('OUTPUT_FILTER', static function (rex_extension_point $ep) {
-        $hideSearch = \rex_config::get('module_preview', 'hide_search');
-        $modulePreview = new module_preview();
         $output = '<div id="module-preview" data-pjax-container="#rex-js-page-main-content"><div class="close"><span aria-hidden="true">&times;</span></div>';
-        if (!$hideSearch) {
-            $output .= $modulePreview->getSearch();
-        }
-        $output .= $modulePreview->getModules();
+            $output .= '<div class="inner"></div>';
         $output .= '</div>';
 
         if ($output) {
