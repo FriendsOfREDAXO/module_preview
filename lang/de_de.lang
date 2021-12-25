@@ -12,3 +12,4 @@ module_preview_manage_images = Bilder verwalten
 module_preview_image_not_found = Das Bild konnte nicht gefunden werden
 module_preview_upload_max_filesize = Die hochgeladene Datei überschreitet die maximale Upload-Größe
 module_preview_upload_max_file_uploads = Es können maximal {0} Dateien gleichzeitig hochgeladen werden
+module_preview_version_warning = Diese Funktionalität steht erst ab REDAXO >= 5.12.0 zur Verfügung.
