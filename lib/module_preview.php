@@ -71,11 +71,16 @@ class module_preview extends rex_article_content_editor
 
                     if (rex::getUser()->getComplexPerm('modules')->hasPerm($m['id'])) {
                         if (rex_template::hasModule($this->template_attributes, $ctId, $m['id'])) {
-                            $image = rex_url::assets('addons/module_preview_modules/'.$m['id'].'.jpg');
                             $moduleList .= '<li class="column">';
                             $moduleList .= '<a href="'.$context->getUrl(['module_id' => $m['id']]).'" data-href="'.$context->getUrl(['module_id' => $m['id']]).'" class="module" data-name="'.$m['id'].'.jpg">';
                             $moduleList .= '<div class="header">'.rex_i18n::translate($m['name'], false).'</div>';
                             if(!$hideImages) {
+                                $image = rex_url::assets('addons/module_preview_modules/'.$m['id'].'.jpg');
+
+                                if(array_key_exists('key', $m) && isset($m['key'])) {
+                                    $image = rex_url::assets('addons/module_preview_modules/'.$m['key'].'.jpg');
+                                }
+
                                 $moduleList .= '<div class="image"><div>';
                                 if(file_exists($image)) {
                                     $moduleList .= '<img src="'.$image.'" alt="'.rex_i18n::translate($m['name'], false).'">';

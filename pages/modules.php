@@ -27,7 +27,7 @@
             foreach ($moduleIds as $moduleId) {
                 $tmpImage = rex_files('module_'.$moduleId['id']);
 
-                if(!$tmpImage || !$tmpImage['tmp_name'] && $tmpImage['error'] !== 0) {
+                if(!$tmpImage || (!$tmpImage['tmp_name'] && $tmpImage['error'] !== 0)) {
                     continue;
                 }
 
@@ -42,8 +42,16 @@
                     continue;
                 }
 
-                $uploadedImage = new UploadedFile($tmpImage['tmp_name'], $tmpImage['name'], $tmpImage['type'], $tmpImage['error']);
-                $uploadedImage->move($targetDir, $moduleId['id'].'.jpg');
+                $module = rex_sql::factory();
+                $module = $module->getArray('select * from ' . rex::getTable('module') . ' WHERE id = :id LIMIT 1', ['id' => $moduleId['id']]);
+                $fileName = $moduleId['id'];
+
+                if(array_key_exists('key', $module[0]) && isset($module[0]['key'])) {
+                    $fileName = $module[0]['key'];
+                }
+
+               $uploadedImage = new UploadedFile($tmpImage['tmp_name'], $tmpImage['name'], $tmpImage['type'], $tmpImage['error']);
+               $uploadedImage->move($targetDir, $fileName.'.jpg');
                 $imageCount++;
             }
 
@@ -82,6 +90,11 @@
                 foreach ($modules as $module)
                 {
                     $image = rex_url::assets('addons/module_preview_modules/'.$module['id'].'.jpg');
+
+                    if(array_key_exists('key', $module) && isset($module['key'])) {
+                        $image = rex_url::assets('addons/module_preview_modules/'.$module['key'].'.jpg');
+                    }
+
                     $content .= '<div class="module-col">';
                         $content .= '<div class="name"><strong>'.$module['name'].'</strong> <span>['.$module['id'].']</span></div>';
                         $content .= '<div class="module rex-form-group form-group">';
