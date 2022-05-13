@@ -90,13 +90,15 @@
                 foreach ($modules as $module)
                 {
                     $image = rex_url::assets('addons/module_preview_modules/'.$module['id'].'.jpg');
+                    $key = '';
 
                     if(array_key_exists('key', $module) && isset($module['key'])) {
                         $image = rex_url::assets('addons/module_preview_modules/'.$module['key'].'.jpg');
+                        $key = ' <span>[' . $module['key'] . ']</span>';
                     }
 
                     $content .= '<div class="module-col">';
-                        $content .= '<div class="name"><strong>'.$module['name'].'</strong> <span>['.$module['id'].']</span></div>';
+                        $content .= '<div class="name"><strong>'.$module['name'].'</strong> <span>['.$module['id'].']</span>' . $key . '</div>';
                         $content .= '<div class="module rex-form-group form-group">';
                             $content .= '<div class="image">';
                                 if(file_exists($image)) {
