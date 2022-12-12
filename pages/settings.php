@@ -7,6 +7,7 @@ if (rex_post('config-submit', 'boolean')) {
         ['classic', 'bool'],
         ['hide_search', 'bool'],
         ['hide_images', 'bool'],
+        ['load_images_from_theme', 'bool'],
     ]));
 
     echo rex_view::success($this->i18n('saved'));
@@ -41,6 +42,17 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="rex-module-preview-hide-images">' . $this->i18n('hide_images') . '</label>';
 $n['field'] = '<input type="checkbox" id="rex-module-preview-hide-images" name="config[hide_images]" value="1" ' . ($this->getConfig('hide_images') ? ' checked="checked"' : '') . ' />';
+$formElements[] = $n;
+
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/checkbox.php');
+
+$formElements = [];
+
+$n = [];
+$n['label'] = '<label for="rex-module-load-images-from-theme">' . $this->i18n('load_images_from_theme') . '</label>';
+$n['field'] = '<input type="checkbox" id="rex-module-load-images-from-theme" name="config[load_images_from_theme]" value="1" ' . ($this->getConfig('load_images_from_theme') ? ' checked="checked"' : '') . ' />';
 $formElements[] = $n;
 
 $fragment = new rex_fragment();
