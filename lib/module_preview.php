@@ -7,7 +7,7 @@ class module_preview extends rex_article_content_editor
     public function getModules(): string
     {
         $hideImages = \rex_config::get('module_preview', 'hide_images');
-        $load_images_from_theme = \rex_config::get('module_preview', 'load_images_from_theme');
+        $loadImagesFromTheme = \rex_config::get('module_preview', 'load_images_from_theme');
         $articleId = rex_request('article_id', 'int');
         $categoryId = rex_request('category_id', 'int');
         $clang = rex_request('clang', 'int');
@@ -78,7 +78,7 @@ class module_preview extends rex_article_content_editor
                         $moduleList .= '<div class="header">' . rex_i18n::translate($m['name'], false) . '</div>';
                         if (!$hideImages) {
 
-                            if ($load_images_from_theme) {
+                            if ($loadImagesFromTheme) {
                                 $image = theme_path::base('/private/redaxo/modules/' . $m['name'] . '/module_preview.jpg');
                             } else {
                                 $image = rex_url::assets('addons/module_preview_modules/' . $m['id'] . '.jpg');
@@ -91,7 +91,7 @@ class module_preview extends rex_article_content_editor
                             $moduleList .= '<div class="image"><div>';
                             if (file_exists($image)) {
 
-                                if ($load_images_from_theme) {
+                                if ($loadImagesFromTheme) {
                                     $data = file_get_contents($image);
                                     $image = 'data:image/jpg;base64,' . base64_encode($data);
                                 }
