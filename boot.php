@@ -25,11 +25,13 @@ if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBacken
         $clang = rex_clang::exists($clang) ? $clang : rex_clang::getStartId();
         $category_id = rex_request('category_id', 'int');
         $article_id = rex_request('article_id', 'int');
+        $ctype = rex_request('ctype', 'int');
 
         $params = [
             'clang' => $clang,
             'category_id' => $category_id,
             'article_id' => $article_id,
+            'ctype' => $ctype,
             'buster' => time()
         ];
 
