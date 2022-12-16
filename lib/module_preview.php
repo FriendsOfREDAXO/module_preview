@@ -77,8 +77,12 @@ class module_preview extends rex_article_content_editor
                     $moduleList .= '<div class="header">' . rex_i18n::translate($m['name'], false) . '</div>';
                     if (!$hideImages) {
 
-                        if ($loadImagesFromTheme) {
-                            $image = theme_path::base('/private/redaxo/modules/' . $m['name'] . '/module_preview.jpg');
+                        if ($loadImagesFromTheme && rex_addon::exists('theme') && rex_addon::get('theme')->isAvailable()) {
+                            $suffix = '';
+                            if (rex_config::get('developer', 'dir_suffix')) {
+                                $suffix = ' [' . $m['id'] . ']';
+                            }
+                            $image = theme_path::base('/private/redaxo/modules/' . $m['name'] . $suffix . '/module_preview.jpg');
                         } else {
                             $image = rex_url::assets('addons/module_preview_modules/' . $m['id'] . '.jpg');
 
