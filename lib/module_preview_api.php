@@ -1,7 +1,9 @@
 <?php
 
-class rex_api_module_preview_get_modules extends rex_api_function {
-    public function execute() {
+class rex_api_module_preview_get_modules extends rex_api_function
+{
+    public function execute()
+    {
         $hideSearch = \rex_config::get('module_preview', 'hide_search');
         $modulePreview = new module_preview();
         $output = '';

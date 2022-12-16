@@ -6,6 +6,7 @@ if (!$addon->hasConfig()) {
         'classic' => false,
         'hide_search' => true,
         'hide_images' => false,
+        'load_images_from_theme' => false,
     ]);
 }
 
