@@ -50,10 +50,12 @@ $content .= $fragment->parse('core/form/checkbox.php');
 
 $formElements = [];
 
-$n = [];
-$n['label'] = '<label for="rex-module-load-images-from-theme">' . $this->i18n('load_images_from_theme') . '</label>';
-$n['field'] = '<input type="checkbox" id="rex-module-load-images-from-theme" name="config[load_images_from_theme]" value="1" ' . ($this->getConfig('load_images_from_theme') ? ' checked="checked"' : '') . ' />';
-$formElements[] = $n;
+if (rex_addon::exists('theme') && rex_addon::get('theme')->isAvailable()) {
+    $n = [];
+    $n['label'] = '<label for="rex-module-load-images-from-theme">' . $this->i18n('load_images_from_theme') . '</label>';
+    $n['field'] = '<input type="checkbox" id="rex-module-load-images-from-theme" name="config[load_images_from_theme]" value="1" ' . ($this->getConfig('load_images_from_theme') ? ' checked="checked"' : '') . ' />';
+    $formElements[] = $n;
+}
 
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
