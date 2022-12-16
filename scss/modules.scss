@@ -35,18 +35,18 @@
 
   label.file-label {
     input[type="file"] {
-      position:absolute;
+      position: absolute;
       top: -1000%;
       left: -1000%;
       visibility: hidden;
     }
 
     &:hover {
-      background: #CCC;
+      background: #cccccc;
     }
 
     &:active {
-      background: #CCF;
+      background: #ccccff;
     }
   }
 
@@ -95,8 +95,8 @@
       height: 35px;
       width: 35px;
       line-height: 15px;
-      background-color: #8B0000;
-      color: #fff;
+      background-color: #8b0000;
+      color: #ffffff;
       z-index: 5;
     }
   }

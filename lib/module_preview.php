@@ -1,4 +1,5 @@
 <?php
+
 class module_preview extends rex_article_content_editor
 {
     private $modules = 0;
