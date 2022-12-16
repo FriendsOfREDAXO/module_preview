@@ -6,6 +6,12 @@ if (rex::isBackend() && ('index.php?page=module_preview/modules' == rex_url::cur
     rex_view::addJSFile($this->getAssetsUrl('js/modules.min.js'));
 }
 
+if (rex::isBackend() && rex::getUser() && rex_config::get('module_preview', 'load_images_from_theme') && rex_addon::exists('theme') && rex_addon::get('theme')->isAvailable()) {
+    $page = $this->getProperty('page');
+    unset($page['subpages']['modules']);
+    $this->setProperty('page', $page);
+}
+
 if (rex::isBackend() && ('index.php?page=content/edit' == rex_url::currentBackendPage() && rex::getUser() && !$useClassic)) {
     rex_view::addJSFile($this->getAssetsUrl('js/script.min.js'));
     rex_view::addCssFile($this->getAssetsUrl('css/styles.css'));
