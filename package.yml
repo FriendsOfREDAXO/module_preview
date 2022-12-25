@@ -13,4 +13,23 @@ page:
 requires:
   redaxo: ^5.7.0
   php:
-    version: '>=7.1'
+    version: '>=7.4'
+
+installer_ignore:
+  - node_modules
+  - .git
+  - .gitignore
+  - .github
+  - tests
+  - .tools
+  - package.json
+  - yarn.lock
+  - resources
+  - .editorconfig
+  - .eslintrc.js
+  - .stylelintrc.js
+  - phpcs.xml
+  - phpunit.xml.dist
+  - composer.json
+  - composer
+

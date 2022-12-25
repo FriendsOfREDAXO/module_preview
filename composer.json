@@ -1,0 +1,26 @@
+{
+  "name": "friedsofredaxo/module_preview",
+  "description": "Module preview for REDAXO 5",
+  "license": "MIT",
+  "scripts": {
+    "lint": "phplint ./ --exclude=vendor --no-cache lib",
+    "phpcs": "phpcs --extensions=php --standard=phpcs.xml lib",
+    "phpcbf": "phpcbf --extensions=php --standard=phpcs.xml lib",
+    "test": "./vendor/bin/pest --testdox"
+  },
+  "autoload-dev": {
+    "classmap": [
+      "lib/module_preview.php"
+    ]
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.6",
+    "overtrue/phplint": "^4.1",
+    "pestphp/pest": "^1.22"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}

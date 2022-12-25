@@ -76,7 +76,6 @@ class module_preview extends rex_article_content_editor
                     $moduleList .= '<a href="' . $context->getUrl(['module_id' => $m['id'], 'ctype' => $ctype]) . '" data-href="' . $context->getUrl(['module_id' => $m['id'], 'ctype' => $ctype]) . '" class="module" data-name="' . $m['id'] . '.jpg">';
                     $moduleList .= '<div class="header">' . rex_i18n::translate($m['name'], false) . '</div>';
                     if (!$hideImages) {
-
                         if ($loadImagesFromTheme && rex_addon::exists('theme') && rex_addon::get('theme')->isAvailable()) {
                             $suffix = '';
                             if (rex_config::get('developer', 'dir_suffix')) {
@@ -93,7 +92,6 @@ class module_preview extends rex_article_content_editor
 
                         $moduleList .= '<div class="image"><div>';
                         if (file_exists($image)) {
-
                             if ($loadImagesFromTheme) {
                                 $data = file_get_contents($image);
                                 $image = 'data:image/jpg;base64,' . base64_encode($data);
