@@ -2,9 +2,9 @@ name: PHP checks
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -54,7 +54,7 @@ jobs:
       - name: Copy and install Addons
         run: |
           rsync -av --exclude='vendor' --exclude='.github' --exclude='.git' --exclude='redaxo_cms' './' 'redaxo_cms/redaxo/src/addons/${{ github.event.repository.name }}'
-          redaxo_cms/redaxo/bin/console package:install 'phpmailer'
+#          redaxo_cms/redaxo/bin/console package:install 'phpmailer'
           redaxo_cms/redaxo/bin/console package:install '${{ github.event.repository.name }}'
 
       - name: Install test dependencies
