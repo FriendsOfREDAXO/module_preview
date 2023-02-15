@@ -87,33 +87,9 @@ if (rex_version::compare(rex::getVersion(), '5.12.0', '<')) {
     $content .= '<p class="help-block rex-note">' . $this->i18n('module_preview_upload_max_file_uploads', $maxFilesToUpload) . '</p>';
     $content .= '<form action="' . rex_url::currentBackendPage() . '" method="POST" enctype="multipart/form-data" class="module-row">';
     foreach ($modules as $module) {
-        $image = rex_url::assets('addons/module_preview_modules/' . $module['id'] . '.jpg');
-        $key = '';
-
-        if (array_key_exists('key', $module) && isset($module['key'])) {
-            $image = rex_url::assets('addons/module_preview_modules/' . $module['key'] . '.jpg');
-            $key = ' <span>[' . $module['key'] . ']</span>';
-        }
-
-        $content .= '<div class="module-col">';
-        $content .= '<div class="name"><strong>' . $module['name'] . '</strong> <span>[' . $module['id'] . ']</span>' . $key . '</div>';
-        $content .= '<div class="module rex-form-group form-group">';
-        $content .= '<div class="image">';
-        if (file_exists($image)) {
-            $content .= '<button class="delete-image" data-image="' . $image . '" value="delete_image"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-            $content .= '<img src="' . $image . '" id="img-module-' . $module['id'] . '" alt="' . rex_i18n::translate($module['name'], false) . '" class="img-responsive">';
-        } else {
-            $content .= '<img src="' . rex_url::assets('addons/module_preview/na.png') . '" id="img-module-' . $module['id'] . '" alt="Not available" class="img-responsive n-a">';
-        }
-        $content .= '</div>';
-        $content .= '<div class="file">';
-        $content .= '<label class="form-label file-label">';
-        $content .= '<input type="file" id="module-' . $module['id'] . '" class="module-image-input" name="module_' . $module['id'] . '" accept="image/jpeg">';
-        $content .= '<span class="btn btn-default">' . $this->i18n('select_image') . '</span>';
-        $content .= '</label>';
-        $content .= '</div>';
-        $content .= '</div>';
-        $content .= '</div>';
+        $fragment = new rex_fragment();
+        $fragment->setVar('module', $module);
+        $content .= $fragment->parse('module_preview/image-upload.php');
     }
     $content .= '<input type="hidden" name="random" id="random" value="' . microtime() . '" />';
     $content .= '<div class="col-sm-12"><input type="submit" name="module_upload" value="' . $this->i18n('module_preview_save') . '" class="btn btn-save"></div>';
