@@ -32,4 +32,4 @@ installer_ignore:
   - phpunit.xml.dist
   - composer.json
   - composer
-
+  - composer.lock
