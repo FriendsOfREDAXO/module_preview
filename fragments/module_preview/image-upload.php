@@ -29,7 +29,7 @@ if (array_key_exists('key', $module) && isset($module['key'])) {
         <div class="file" style="margin-top: 5px;">
             <label class="form-label file-label">
                 <input type="file" id="module-<?= $module['id'] ?>" class="module-image-input" name="module_<?= $module['id'] ?>" accept="image/jpeg">
-                <span class="btn btn-default"><?= $this->i18n('select_image') ?></span>
+                <span class="btn btn-default"><?= rex_i18n::msg('module_preview_select_image') ?></span>
             </label>
         </div>
     </div>
