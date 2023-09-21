@@ -74,50 +74,53 @@ class module_preview extends rex_article_content_editor
             if (true !== (rex::getUser()->getComplexPerm('modules')->hasPerm($m['id']) ?? false)) {
                 continue;
             }
-            if (rex_template::hasModule($this->template_attributes, $ctype, $m['id'])) {
-                $moduleList .= '<li class="column">';
-                $moduleList .= '<a href="' . $context->getUrl(['module_id' => $m['id'], 'ctype' => $ctype]) . '" data-href="' . $context->getUrl(['module_id' => $m['id'], 'ctype' => $ctype]) . '" class="module" data-name="' . $m['id'] . '.jpg">';
-                $moduleList .= '<div class="header">' . rex_i18n::translate($m['name'], false) . '</div>';
-                if (!$hideImages) {
-                    if ($loadImagesFromTheme && rex_addon::exists('theme') && rex_addon::get('theme')->isAvailable()) {
-                        $suffix = '';
-                        if (rex_config::get('developer', 'dir_suffix')) {
-                            $suffix = ' [' . $m['id'] . ']';
-                        }
-                        $image = theme_path::base('/private/redaxo/modules/' . $m['name'] . $suffix . '/module_preview.jpg');
-                    } else {
-                        $image = rex_url::assets('addons/module_preview_modules/' . $m['id'] . '.jpg');
 
-                        if (array_key_exists('key', $m) && isset($m['key'])) {
-                            $image = rex_url::assets('addons/module_preview_modules/' . $m['key'] . '.jpg');
-                        }
-                    }
-
-                    $moduleList .= '<div class="image"><div>';
-                    if (file_exists($image)) {
-                        if ($loadImagesFromTheme) {
-                            $data = file_get_contents($image);
-                            $image = 'data:image/jpg;base64,' . base64_encode($data);
-                        }
-
-                        $moduleList .= '<img src="' . $image . '" alt="' . rex_i18n::translate($m['name'], false) . '">';
-                    } else {
-                        $moduleList .= '<div class="not-available"></div>';
-                    }
-                    $moduleList .= '</div></div>';
-                }
-                $moduleList .= '</a>';
-                $moduleList .= '</li>';
-
-                $slug = rex_string::normalize(rex_i18n::translate($m['name'], false), '-');
-                $this->modules[] = [
-                    'name' => rex_i18n::translate($m['name'], false),
-                    'slug' => $slug,
-                    'id' => $m['id'],
-                    'key' => $m['key'],
-                    'imagePath' => rex_addon::get('module_preview')->getAssetsPath($slug . '.jpg'),
-                ];
+            // Check if the template allows the usage of the module
+            if (true !== rex_template::hasModule($this->template_attributes, $ctype, $m['id'])) {
+                continue;
             }
+            $moduleList .= '<li class="column">';
+            $moduleList .= '<a href="' . $context->getUrl(['module_id' => $m['id'], 'ctype' => $ctype]) . '" data-href="' . $context->getUrl(['module_id' => $m['id'], 'ctype' => $ctype]) . '" class="module" data-name="' . $m['id'] . '.jpg">';
+            $moduleList .= '<div class="header">' . rex_i18n::translate($m['name'], false) . '</div>';
+            if (!$hideImages) {
+                if ($loadImagesFromTheme && rex_addon::exists('theme') && rex_addon::get('theme')->isAvailable()) {
+                    $suffix = '';
+                    if (rex_config::get('developer', 'dir_suffix')) {
+                        $suffix = ' [' . $m['id'] . ']';
+                    }
+                    $image = theme_path::base('/private/redaxo/modules/' . $m['name'] . $suffix . '/module_preview.jpg');
+                } else {
+                    $image = rex_url::assets('addons/module_preview_modules/' . $m['id'] . '.jpg');
+
+                    if (array_key_exists('key', $m) && isset($m['key'])) {
+                        $image = rex_url::assets('addons/module_preview_modules/' . $m['key'] . '.jpg');
+                    }
+                }
+
+                $moduleList .= '<div class="image"><div>';
+                if (file_exists($image)) {
+                    if ($loadImagesFromTheme) {
+                        $data = file_get_contents($image);
+                        $image = 'data:image/jpg;base64,' . base64_encode($data);
+                    }
+
+                    $moduleList .= '<img src="' . $image . '" alt="' . rex_i18n::translate($m['name'], false) . '">';
+                } else {
+                    $moduleList .= '<div class="not-available"></div>';
+                }
+                $moduleList .= '</div></div>';
+            }
+            $moduleList .= '</a>';
+            $moduleList .= '</li>';
+
+            $slug = rex_string::normalize(rex_i18n::translate($m['name'], false), '-');
+            $this->modules[] = [
+                'name' => rex_i18n::translate($m['name'], false),
+                'slug' => $slug,
+                'id' => $m['id'],
+                'key' => $m['key'],
+                'imagePath' => rex_addon::get('module_preview')->getAssetsPath($slug . '.jpg'),
+            ];
         }
         $moduleList .= '</ul>';
         $moduleList .= '</div>';
