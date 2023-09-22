@@ -6,8 +6,8 @@ class module_preview extends rex_article_content_editor
 
     public function getModules(): string
     {
-        $hideImages = \rex_config::get('module_preview', 'hide_images');
-        $loadImagesFromTheme = \rex_config::get('module_preview', 'load_images_from_theme');
+        $hideImages = \rex_config::get('module_preview', 'hide_images', false);
+        $loadImagesFromTheme = \rex_config::get('module_preview', 'load_images_from_theme', false);
         $articleId = rex_request('article_id', 'int');
         $categoryId = rex_request('category_id', 'int');
         $clang = rex_request('clang', 'int');
