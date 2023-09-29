@@ -2,6 +2,13 @@
 
 class module_preview extends rex_article_content_editor
 {
+    /** @var array */
+    private $modules = [];
+
+    /**
+     * Get Modules from database and build HTML snippet.
+     * @throws rex_sql_exception
+     */
     public function getModules(): string
     {
         $hideImages = \rex_config::get('module_preview', 'hide_images', false);
@@ -90,11 +97,16 @@ class module_preview extends rex_article_content_editor
     public function getSearch(): string
     {
         $addon = rex_addon::get('module_preview');
-        $search = '<div class="container"><div class="form-group">';
-        $search .= '<label class="control-label" for="module-preview-search"><input class="form-control" name="module-preview-search" type="text" id="module-preview-search" value="" placeholder="' . $addon->i18n('module_preview_search_modules') . '" /></label>';
-        $search .= '</div></div>';
 
-        return $search;
+        return <<<HTML
+            <div class="container">
+                <div class="form-group">
+                    <label class="control-label" for="module-preview-search">
+                        <input class="form-control" name="module-preview-search" type="text" id="module-preview-search" value="" placeholder="{$addon->i18n('module_preview_search_modules')}" />
+                    </label>
+                </div>
+            </div>
+            HTML;
     }
 
     public static function hasClipboardContents(): bool
