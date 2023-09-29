@@ -2,8 +2,6 @@
 
 class module_preview extends rex_article_content_editor
 {
-    private $modules = 0;
-
     public function getModules(): string
     {
         $hideImages = \rex_config::get('module_preview', 'hide_images', false);
@@ -19,7 +17,7 @@ class module_preview extends rex_article_content_editor
             LEFT JOIN ' . rex::getTablePrefix() . 'template as template ON template.id = article.template_id
             WHERE article.id = ? AND clang_id = ?', [
             $articleId,
-            $clang
+            $clang,
         ]);
 
         $this->template_attributes = $article->getArrayValue('template_attributes');
@@ -54,9 +52,9 @@ class module_preview extends rex_article_content_editor
                 $moduleList .= '<li class="column large">';
                 $moduleList .= '<a href="' . $context->getUrl(['module_id' => $sliceDetails['module_id'], 'ctype' => $ctype]) . '" data-href="' . $context->getUrl(['module_id' => $sliceDetails['module_id'], 'ctype' => $ctype]) . '" class="module" data-name="' . $sliceDetails['module_id'] . '.jpg">';
                 $moduleList .= '<div class="header">';
-                if ($clipBoardContents['action'] === 'copy') {
+                if ('copy' === $clipBoardContents['action']) {
                     $moduleList .= '<i class="fa fa-clipboard" aria-hidden="true" style="margin-right: 5px;"></i>';
-                } elseif ($clipBoardContents['action'] === 'cut') {
+                } elseif ('cut' === $clipBoardContents['action']) {
                     $moduleList .= '<i class="fa fa-scissors" aria-hidden="true" style="margin-right: 5px;"></i>';
                 }
                 $moduleList .= '<span>' . rex_addon::get('bloecks')->i18n('insert_slice', $sliceDetails['name'], $clipBoardContents['slice_id'], rex_article::get($sliceDetails['article_id'])->getName()) . '</span>';
@@ -70,17 +68,17 @@ class module_preview extends rex_article_content_editor
         $this->modules = [];
 
         // Build cards for all modules available to the user and the current template.
-        foreach ($modules as $m) {
+        foreach ($modules as $module) {
             // Check if the user has permission to use the module
-            if (true !== (rex::getUser()->getComplexPerm('modules')->hasPerm($m['id']) ?? false)) {
+            if (true !== (rex::getUser()->getComplexPerm('modules')->hasPerm($module['id']) ?? false)) {
                 continue;
             }
             foreach ($templateCtypes as $cTypeId => $cTypeName) {
                 // Check if the template allows the usage of the module
-                if (true !== rex_template::hasModule($this->template_attributes, $cTypeId, $m['id'])) {
+                if (true !== rex_template::hasModule($this->template_attributes, $cTypeId, $module['id'])) {
                     continue;
                 }
-                $moduleList .= $this->moduleListItem($context, $m, $ctype, $hideImages, $loadImagesFromTheme);
+                $moduleList .= $this->moduleListItem($context, $module, $ctype, $hideImages, $loadImagesFromTheme);
             }
         }
         $moduleList .= '</ul>';
@@ -125,15 +123,13 @@ class module_preview extends rex_article_content_editor
     }
 
     /**
-     * Create a list item HTML snippet for module selection
+     * Create a list item HTML snippet for module selection.
      *
      * @param rex_context $context             Current context
      * @param array       $moduleData          Module data
      * @param int         $ctype               Current content type
      * @param bool        $hideImages          Shall images be hidden
      * @param bool        $loadImagesFromTheme Are images loaded from theme
-     *
-     * @return string
      */
     private function moduleListItem(rex_context $context, array $moduleData, int $ctype, bool $hideImages, bool $loadImagesFromTheme): string
     {
@@ -143,10 +139,10 @@ class module_preview extends rex_article_content_editor
 
         $slug = rex_string::normalize(rex_i18n::translate($moduleData['name'], false), '-');
         $this->modules[] = [
-            'name'      => rex_i18n::translate($moduleData['name'], false),
-            'slug'      => $slug,
-            'id'        => $moduleData['id'],
-            'key'       => $moduleData['key'],
+            'name' => rex_i18n::translate($moduleData['name'], false),
+            'slug' => $slug,
+            'id' => $moduleData['id'],
+            'key' => $moduleData['key'],
             'imagePath' => rex_addon::get('module_preview')->getAssetsPath($slug . '.jpg'),
         ];
 
@@ -162,11 +158,6 @@ class module_preview extends rex_article_content_editor
 
     /**
      * Create and return the markup for a DIV element containing the preview image as base64 encoded data string.
-     *
-     * @param bool  $loadImagesFromTheme
-     * @param array $moduleData
-     *
-     * @return string
      */
     private function previewImageContainer(bool $loadImagesFromTheme, array $moduleData): string
     {
@@ -199,11 +190,9 @@ class module_preview extends rex_article_content_editor
      * data string.
      * Returns a _not-available_ placeholder DIV tag if $imageFile does not exist.
      *
-     * @param string $imageFile           Absolute image file to convert.
+     * @param string $imageFile           absolute image file to convert
      * @param bool   $loadImagesFromTheme Are images loaded from theme?
      * @param string $moduleLabel         Localized label of the module the image is the preview for
-     *
-     * @return string
      */
     private function imageFileToTag(string $imageFile, bool $loadImagesFromTheme, string $moduleLabel): string
     {

@@ -1,4 +1,5 @@
 <?php
+
 $addon = rex_addon::get('module_preview');
 
 if (!$addon->hasConfig()) {

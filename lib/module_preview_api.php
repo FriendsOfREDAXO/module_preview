@@ -14,6 +14,6 @@ class rex_api_module_preview_get_modules extends rex_api_function
 
         header('Content-Type: text/html; charset=UTF-8');
         echo $output;
-        exit();
+        exit;
     }
 }

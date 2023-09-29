@@ -1,7 +1,5 @@
 <?php
-/**
- * @var rex_fragment $this
- */
+/** @var rex_fragment $this */
 
 $module = $this->getVar('module');
 $image = rex_url::assets('addons/module_preview_modules/' . $module['id'] . '.jpg');
@@ -24,7 +22,7 @@ if (array_key_exists('key', $module) && isset($module['key'])) {
                 <img src="<?= $image ?>" id="img-module-<?= $module['id'] ?>" alt="<?= rex_i18n::translate($module['name'], false) ?>" class="img-responsive">
             <?php else: ?>
                 <img src="<?= rex_url::assets('addons/module_preview/na.png') ?>" id="img-module-<?= $module['id'] ?>" alt="Not available" class="img-responsive n-a">
-            <?php endif; ?>
+            <?php endif ?>
         </div>
         <div class="file" style="margin-top: 5px;">
             <label class="form-label file-label">
