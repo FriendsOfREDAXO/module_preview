@@ -51,7 +51,7 @@ if (rex_version::compare(rex::getVersion(), '5.12.0', '<')) {
             }
 
             $uploadedImage = new UploadedFile($tmpImage['tmp_name'], $tmpImage['name'], $tmpImage['type'], $tmpImage['error']);
-            $uploadedImage->move($targetDir, $fileName . '.jpg');
+            $uploadedImage->move($targetDir, "{$fileName}.{$uploadedImage->getClientOriginalExtension()}");
             ++$imageCount;
         }
 
