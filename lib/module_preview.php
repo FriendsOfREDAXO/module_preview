@@ -125,6 +125,35 @@ class module_preview extends rex_article_content_editor
         return @json_decode(rex_request::cookie('rex_bloecks_cutncopy', 'string', ''), true);
     }
 
+    /**
+     * Get the preview image for a module and, if set, the key of the module as a `span` HTML snippet
+     *
+     * @param array $module
+     *
+     * @return array{image: ?string, moduleKey: ?string}
+     */
+    public static function getModulePreviewImage(array $module): array
+    {
+        // If the module has a key set, use the key to identify the image. Else use the ID of the module
+        if (empty($module['key'] ?? null)) {
+            $key = null;
+            $imageName = $module['id'];
+        } else {
+            $key = ' <span>[' . $module['key'] . ']</span>';
+            $imageName = $module['key'];
+        }
+
+        // Search the preview directory for valid images
+        $globPattern = rex_url::assets('addons/module_preview_modules/') . "{$imageName}.*";
+        $foundImages = glob($globPattern);
+        $validImages = false !== $foundImages ? preg_grep('/^.*(jpe?g|png)/', $foundImages) : [];
+
+        return [
+            'image'     => (empty($validImages)) ? null : reset($validImages),
+            'moduleKey' => $key,
+        ];
+    }
+
     private function getSliceDetails($sliceId, $clangId)
     {
         if ($sliceId && $clangId) {
