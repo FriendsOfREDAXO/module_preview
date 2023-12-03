@@ -127,9 +127,7 @@ class module_preview extends rex_article_content_editor
     }
 
     /**
-     * Get the preview image for a module and, if set, the key of the module as a `span` HTML snippet
-     *
-     * @param array $module
+     * Get the preview image for a module and, if set, the key of the module as a `span` HTML snippet.
      *
      * @return array{image: ?string, moduleKey: ?string}
      */
@@ -150,7 +148,7 @@ class module_preview extends rex_article_content_editor
         $validImages = false !== $foundImages ? preg_grep('/^.*(jpe?g|png)/', $foundImages) : [];
 
         return [
-            'image'     => (empty($validImages)) ? null : reset($validImages),
+            'image' => (empty($validImages)) ? null : reset($validImages),
             'moduleKey' => $key,
         ];
     }
