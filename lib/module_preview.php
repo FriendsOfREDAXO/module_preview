@@ -56,8 +56,9 @@ class module_preview extends rex_article_content_editor
             $context->setParam('source_slice_id', $clipBoardContents['slice_id']);
 
             if ($sliceDetails['article_id']) {
+                $moduleLink = $context->getUrl(['module_id' => $sliceDetails['module_id'], 'ctype' => $ctype]);
                 $moduleList .= '<li class="column large">';
-                $moduleList .= '<a href="' . $context->getUrl(['module_id' => $sliceDetails['module_id'], 'ctype' => $ctype]) . '" data-href="' . $context->getUrl(['module_id' => $sliceDetails['module_id'], 'ctype' => $ctype]) . '" class="module" data-name="' . $sliceDetails['module_id'] . '.jpg">';
+                $moduleList .= "<a href=\"{$moduleLink}\" data-href=\"{$moduleLink}\" class=\"module\" data-name=\"{$sliceDetails['module_id']}.jpg\">";
                 $moduleList .= '<div class="header">';
                 if ('copy' === $clipBoardContents['action']) {
                     $moduleList .= '<i class="fa fa-clipboard" aria-hidden="true" style="margin-right: 5px;"></i>';
@@ -125,6 +126,35 @@ class module_preview extends rex_article_content_editor
         return @json_decode(rex_request::cookie('rex_bloecks_cutncopy', 'string', ''), true);
     }
 
+    /**
+     * Get the preview image for a module and, if set, the key of the module as a `span` HTML snippet
+     *
+     * @param array $module
+     *
+     * @return array{image: ?string, moduleKey: ?string}
+     */
+    public static function getModulePreviewImage(array $module): array
+    {
+        // If the module has a key set, use the key to identify the image. Else use the ID of the module
+        if (empty($module['key'] ?? null)) {
+            $key = null;
+            $imageName = $module['id'];
+        } else {
+            $key = ' <span>[' . $module['key'] . ']</span>';
+            $imageName = $module['key'];
+        }
+
+        // Search the preview directory for valid images
+        $globPattern = rex_url::assets('addons/module_preview_modules/') . "{$imageName}.*";
+        $foundImages = glob($globPattern);
+        $validImages = false !== $foundImages ? preg_grep('/^.*(jpe?g|png)/', $foundImages) : [];
+
+        return [
+            'image'     => (empty($validImages)) ? null : reset($validImages),
+            'moduleKey' => $key,
+        ];
+    }
+
     private function getSliceDetails($sliceId, $clangId)
     {
         if ($sliceId && $clangId) {
@@ -180,11 +210,7 @@ class module_preview extends rex_article_content_editor
             }
             $image = theme_path::base('/private/redaxo/modules/' . $moduleData['name'] . $suffix . '/module_preview.jpg');
         } else {
-            $image = rex_url::assets('addons/module_preview_modules/' . $moduleData['id'] . '.jpg');
-
-            if (array_key_exists('key', $moduleData) && isset($moduleData['key'])) {
-                $image = rex_url::assets('addons/module_preview_modules/' . $moduleData['key'] . '.jpg');
-            }
+            ['image' => $image] = static::getModulePreviewImage($moduleData);
         }
         $preview = $this->imageFileToTag($image, $loadImagesFromTheme, rex_i18n::translate($moduleData['name'], false));
 
@@ -206,9 +232,9 @@ class module_preview extends rex_article_content_editor
      * @param bool   $loadImagesFromTheme Are images loaded from theme?
      * @param string $moduleLabel         Localized label of the module the image is the preview for
      */
-    private function imageFileToTag(string $imageFile, bool $loadImagesFromTheme, string $moduleLabel): string
+    private function imageFileToTag(?string $imageFile, bool $loadImagesFromTheme, string $moduleLabel): string
     {
-        if (!file_exists($imageFile)) {
+        if (null === $imageFile || !file_exists($imageFile)) {
             return '<div class="not-available"></div>';
         }
         $image = $imageFile;
